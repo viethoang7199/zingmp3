@@ -42,7 +42,7 @@ const Player = ({ onHandleToggleListSongs, classNameIconListRight }) => {
                 dispatch(actions.setCurSongData(res1.data.data));
             }
             if (res2.data.err === 0) {
-                // audio.pause();
+                audio.pause();
                 setAudio(new Audio(res2.data.data['128']));
             } else {
                 audio.pause();
