@@ -6,14 +6,13 @@ import { Link } from 'react-router-dom';
 import * as actions from '../../store/actions';
 import icons from '../../utils/icons';
 
-const SongItems = ({ thumbnail, title, artistsNames, releaseDate, sId, order, percent, style, artists, size, isSearchPage, textEllipsis }) => {
+const SongItems = ({ thumbnail, title, artistsNames, releaseDate, sId, order, percent, style, artists, size, isSearchPage, textEllipsis, threeDots }) => {
 
     const { BsPlayCircle, BsThreeDots } = icons;
     const dispatch = useDispatch();
 
     return (
-        <div
-            className={`w-full p-[10px] group flex items-center hover:bg-alphaBg rounded-md ${style}`}>
+        <div className={`w-full p-[10px] group flex items-center hover:bg-alphaBg relative rounded-md ${style}`}>
             {order &&
                 <span className={`text-[40px] text-transparent mr-4`}
                     style={{ WebkitTextStroke: `1px ${order === 1 ? '#4a90e2' : order === 2 ? '#50e3c2' : '#e35050'}`, fontFamily: 'Roboto, sans-serif', fontWeight: '900' }}
@@ -59,9 +58,9 @@ const SongItems = ({ thumbnail, title, artistsNames, releaseDate, sId, order, pe
                 {releaseDate && <span className="text-xs text-textSecondary">{moment(releaseDate * 1000).fromNow()}</span>}
             </div>
             {percent && <span className='text-base font-bold'>{percent}%</span>}
-            <div className="hidden p-2 rounded-full cursor-pointer group-hover:block hover:bg-alphaBg">
+            {!threeDots && <div className="absolute hidden p-2 rounded-full cursor-pointer right-4 group-hover:block hover:bg-alphaBg">
                 <BsThreeDots size={16} />
-            </div>
+            </div>}
 
         </div>
     )

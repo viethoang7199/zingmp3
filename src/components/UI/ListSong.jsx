@@ -56,7 +56,8 @@ const ListSong = ({ totalDuration, isHideTitle, style, songsLength, releaseDate,
                             <span>{distributor}</span>
                         </div>
                     </div>
-                </div>}
+                </div>
+            }
         </div>
     )
 }

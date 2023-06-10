@@ -2,9 +2,9 @@ import React from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { sidebarMenuBot, sidebarMenuTop } from '../utils/menu';
 
-const SidebarLeft = () => {
+const SidebarLeft = ({ className }) => {
     return (
-        <aside className="1280:w-[240px] w-[70px] bg-sideBarPopupBg 1280:bg-sideBarBg h-[calc(100%-90px)] pb-[55px] transition-[width] duration-300 ease-out">
+        <aside className={`1280:w-[240px] w-[70px] bg-sideBarPopupBg 1280:bg-sideBarBg pb-[55px] transition-[width] duration-300 ease-out ${className}`}>
             <div className="w-full 1280:w-[240px] h-[70px] 1280:pr-[25px] 1280:pl-[28px] flex 1280:justify-start justify-center items-center">
                 <Link to='/'>
                     <div

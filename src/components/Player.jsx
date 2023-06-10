@@ -7,6 +7,7 @@ import * as actions from '../store/actions';
 import { Link } from 'react-router-dom';
 import LoadingPlayerButton from './loading/LoadingPlayerButton';
 import moment from 'moment';
+import Helmet from './Helmet';
 
 var intervalId
 
@@ -41,7 +42,7 @@ const Player = ({ onHandleToggleListSongs, classNameIconListRight }) => {
                 dispatch(actions.setCurSongData(res1.data.data));
             }
             if (res2.data.err === 0) {
-                audio.pause();
+                // audio.pause();
                 setAudio(new Audio(res2.data.data['128']));
             } else {
                 audio.pause();
@@ -63,7 +64,7 @@ const Player = ({ onHandleToggleListSongs, classNameIconListRight }) => {
         if (isPlaying) {
             audio.play();
             intervalId = setInterval(() => {
-                let percent = Math.round(audio.currentTime * 10000 / songInfo.duration) / 100;
+                let percent = Math.round(audio.currentTime * 10000 / songInfo?.duration) / 100;
                 thumbRef.current.style.cssText = `right: ${100 - percent}%`;
                 setCurSecond(Math.round(audio.currentTime));
             }, 200);
@@ -149,132 +150,132 @@ const Player = ({ onHandleToggleListSongs, classNameIconListRight }) => {
     const handleRepeatOne = () => {
         audio.play();
     }
-
     return (
-        <div className="fixed z-[1100] w-full bottom-0">
-            <div className="h-[90px] min-w-[768px] px-5 bg-playerBg border-t border-alphaBg flex items-center justify-between">
-                <div className="flex relative w-[30%] z-[999]">
-                    <div className="flex items-center w-full">
-                        <div className="mr-[10px] basis-[auto] grow-0 shrink-0">
-                            <img
-                                src={songInfo?.thumbnail}
-                                alt=""
-                                className="object-cover w-16 h-16 rounded"
-                            />
-                        </div>
-                        <div className="flex flex-col basis-[auto] grow-1 shrink-1">
-                            <span className="text-sm font-medium">{songInfo?.title}</span>
-                            <span className="text-xs text-textSecondary">
-                                {
-                                    songInfo?.artists?.map((item, index) => (
-                                        <Link
-                                            to={item.link}
-                                            key={item.id}
-                                            className='text-xs text-textSecondary hover:underline hover:text-purplePrimary'>
-                                            <span>{(index ? ', ' : '') + item.name}</span>
-                                        </Link>
-                                    ))
-                                }
-                            </span>
-                        </div>
-                        <div className="ml-[23px] basis-[auto] grow-0 shrink-0">
-                            <div className="flex items-center justify-between">
-                                <span className="p-[3px] mx-[2px]"><AiOutlineHeart size={16} /></span>
-                                <span className="p-[3px] mx-[2px]"><BsThreeDots size={16} /></span>
+        <Helmet title={`${songInfo?.title} - ${songInfo?.artistsNames} | Bài hát, lyrics`}>
+            <div className="fixed z-[1100] w-full bottom-0">
+                <div className="h-[90px] min-w-[768px] px-5 bg-playerBg border-t border-alphaBg flex items-center justify-between">
+                    <div className="flex relative w-[30%] z-[999]">
+                        <div className="flex items-center w-full">
+                            <div className="mr-[10px] basis-[auto] grow-0 shrink-0">
+                                <img
+                                    src={songInfo?.thumbnail}
+                                    alt=""
+                                    className="object-cover w-16 h-16 rounded"
+                                />
+                            </div>
+                            <div className="flex flex-col basis-[auto] grow-1 shrink-1">
+                                <span className="text-sm font-medium">{songInfo?.title}</span>
+                                <span className="text-xs text-textSecondary">
+                                    {
+                                        songInfo?.artists?.map((item, index) => (
+                                            <Link
+                                                to={item.link}
+                                                key={item.id}
+                                                className='text-xs text-textSecondary hover:underline hover:text-purplePrimary'>
+                                                <span>{(index ? ', ' : '') + item.name}</span>
+                                            </Link>
+                                        ))
+                                    }
+                                </span>
+                            </div>
+                            <div className="ml-[23px] basis-[auto] grow-0 shrink-0">
+                                <div className="flex items-center justify-between">
+                                    <span className="p-[3px] mx-[2px]"><AiOutlineHeart size={16} /></span>
+                                    <span className="p-[3px] mx-[2px]"><BsThreeDots size={16} /></span>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div className="grow">
-                    <div className="flex items-center justify-center shrink-0 mb-[5px]">
-                        <button
-                            className={`mx-[9px] p-[3px] rounded-full hover:bg-alphaBg ${isShuffle ? "text-purplePrimary" : ""}`}
-                            onClick={() => setIsShuffle(!isShuffle)}
-                        >
-                            <CiShuffle size={20} />
-                        </button>
-                        <button
-                            className={`mx-[9px] p-[3px] rounded-full hover:bg-alphaBg ${!songs ? "text-textSecondary cursor-default" : "text-white"}`}
-                            onClick={handlePrevSong}
-                        >
-                            <MdSkipPrevious size={28} />
-                        </button>
-                        <button
-                            className="mx-[9px] p-[3px]"
-                            onClick={handleTogglePlay}
-                        >
-                            {isLoadingSource ? <LoadingPlayerButton /> : isPlaying ? <BsPauseCircle size={36} /> : <BsPlayCircle size={36} />}
-                        </button>
-                        <button
-                            className={`mx-[9px] p-[3px] rounded-full hover:bg-alphaBg ${!songs ? "text-textSecondary cursor-default" : "text-white"}`}
-                            onClick={handleNextSong}
-                        >
-                            <MdSkipNext size={28} />
-                        </button>
-                        <button
-                            className={`mx-[9px] p-[3px] rounded-full hover:bg-alphaBg ${repeatMode ? "text-purplePrimary" : ""}`}
-                            onClick={() => setRepeatMode(prev => prev === 2 ? 0 : prev + 1)}
-                        >
-                            {repeatMode === 1 ? <BsRepeat1 size={20} /> : <BsRepeat size={20} />}
-                        </button>
+                    <div className="grow">
+                        <div className="flex items-center justify-center shrink-0 mb-[5px]">
+                            <button
+                                className={`mx-[9px] p-[3px] rounded-full hover:bg-alphaBg ${isShuffle ? "text-purplePrimary" : ""}`}
+                                onClick={() => setIsShuffle(!isShuffle)}
+                            >
+                                <CiShuffle size={20} />
+                            </button>
+                            <button
+                                className={`mx-[9px] p-[3px] rounded-full hover:bg-alphaBg ${!songs ? "text-textSecondary cursor-default" : "text-white"}`}
+                                onClick={handlePrevSong}
+                            >
+                                <MdSkipPrevious size={28} />
+                            </button>
+                            <button
+                                className="mx-[9px] p-[3px]"
+                                onClick={handleTogglePlay}
+                            >
+                                {isLoadingSource ? <LoadingPlayerButton /> : isPlaying ? <BsPauseCircle size={36} /> : <BsPlayCircle size={36} />}
+                            </button>
+                            <button
+                                className={`mx-[9px] p-[3px] rounded-full hover:bg-alphaBg ${!songs ? "text-textSecondary cursor-default" : "text-white"}`}
+                                onClick={handleNextSong}
+                            >
+                                <MdSkipNext size={28} />
+                            </button>
+                            <button
+                                className={`mx-[9px] p-[3px] rounded-full hover:bg-alphaBg ${repeatMode ? "text-purplePrimary" : ""}`}
+                                onClick={() => setRepeatMode(prev => prev === 2 ? 0 : prev + 1)}
+                            >
+                                {repeatMode === 1 ? <BsRepeat1 size={20} /> : <BsRepeat size={20} />}
+                            </button>
+                        </div>
+                        <div className="flex items-center justify-center w-full mb-[5px]">
+                            <span className="text-xs opacity-50 mr-[10px] text-right min-w-[45px] font-medium">
+                                {moment.utc(curSecond * 1000).format('mm:ss')}
+                            </span>
+                            <div
+                                ref={trackRef}
+                                className="w-full relative hover:h-[6px] cursor-pointer rounded-full bg-progressBarBg h-[3px]"
+                                onClick={handleChangeProgressBar}
+                            >
+                                <div ref={thumbRef} className="absolute top-0 bottom-0 left-0 bg-white rounded-full"></div>
+                            </div>
+                            <span className="text-xs ml-[10px] min-w-[45px] font-medium">
+                                {moment.utc(songInfo?.duration * 1000).format('mm:ss')}
+                            </span>
+                        </div>
                     </div>
-                    <div className="flex items-center justify-center w-full mb-[5px]">
-                        <span className="text-xs opacity-50 mr-[10px] text-right min-w-[45px] font-medium">
-                            {moment.utc(curSecond * 1000).format('mm:ss')}
-                        </span>
+                    <div className='w-[30%] flex items-center justify-end'>
+                        <span className="p-2 rounded-full cursor-pointer hover:bg-alphaBg"><BsCameraVideo size={16} /></span>
+                        <span className="p-2 rounded-full cursor-pointer hover:bg-alphaBg"><GiMicrophone size={16} /></span>
+                        <span className="p-2 rounded-full cursor-pointer hover:bg-alphaBg"><VscChromeRestore size={16} /></span>
                         <div
-                            ref={trackRef}
-                            className="w-full relative hover:h-[6px] cursor-pointer rounded-full bg-progressBarBg h-[3px]"
-                            onClick={handleChangeProgressBar}
+                            className="flex items-center"
+                            onMouseEnter={() => setIsHoverVolume(true)}
+                            onMouseLeave={() => setIsHoverVolume(false)}
                         >
-                            <div ref={thumbRef} className="absolute top-0 bottom-0 left-0 bg-white rounded-full"></div>
+                            <span
+                                className="p-2 rounded-full cursor-pointer hover:bg-alphaBg"
+                                onClick={() => { setVolume(prev => parseInt(prev) === 0 ? 50 : 0) }}
+                            >
+                                {
+                                    parseInt(volume) >= 50 ? <RxSpeakerLoud size={16} /> : parseInt(volume) === 0 ? <RxSpeakerOff /> : <RxSpeakerModerate />
+                                }
+                            </span>
+                            <div className={`w-[70px] h-[3px] bg-progressBarBg rounded-full ${isHoverVolume ? "hidden" : "relative"}`}>
+                                <div ref={volumeRef} className="absolute top-0 bottom-0 left-0 right-0 bg-white rounded-full"></div>
+                            </div>
+                            <input
+                                type="range"
+                                step={1}
+                                min={0}
+                                max={100}
+                                value={volume}
+                                onChange={(e) => setVolume(e.target.value)}
+                                className={`w-[70px] h-[5px] ${isHoverVolume ? "flex" : "hidden"}`}
+                            />
                         </div>
-                        <span className="text-xs ml-[10px] min-w-[45px] font-medium">
-                            {moment.utc(songInfo?.duration * 1000).format('mm:ss')}
-                        </span>
-                    </div>
-                </div>
-                <div className='w-[30%] flex items-center justify-end'>
-                    <span className="p-2 rounded-full cursor-pointer hover:bg-alphaBg"><BsCameraVideo size={16} /></span>
-                    <span className="p-2 rounded-full cursor-pointer hover:bg-alphaBg"><GiMicrophone size={16} /></span>
-                    <span className="p-2 rounded-full cursor-pointer hover:bg-alphaBg"><VscChromeRestore size={16} /></span>
-                    <div
-                        className="flex items-center"
-                        onMouseEnter={() => setIsHoverVolume(true)}
-                        onMouseLeave={() => setIsHoverVolume(false)}
-                    >
+                        <span className="w-[1px] h-[33px] bg-alphaBg mx-5"></span>
                         <span
-                            className="p-2 rounded-full cursor-pointer hover:bg-alphaBg"
-                            onClick={() => { setVolume(prev => parseInt(prev) === 0 ? 50 : 0) }}
+                            className={`p-2 rounded-md cursor-pointer bg-alphaBg hover:bg-textSecondary ${classNameIconListRight}`}
+                            onClick={onHandleToggleListSongs}
                         >
-                            {
-                                parseInt(volume) >= 50 ? <RxSpeakerLoud size={16} /> : parseInt(volume) === 0 ? <RxSpeakerOff /> : <RxSpeakerModerate />
-                            }
+                            <BsMusicNoteList size={16} />
                         </span>
-                        <div className={`w-[70px] h-[3px] bg-progressBarBg rounded-full ${isHoverVolume ? "hidden" : "relative"}`}>
-                            <div ref={volumeRef} className="absolute top-0 bottom-0 left-0 right-0 bg-white rounded-full"></div>
-                        </div>
-                        <input
-                            type="range"
-                            step={1}
-                            min={0}
-                            max={100}
-                            value={volume}
-                            onChange={(e) => setVolume(e.target.value)}
-                            className={`w-[70px] h-[5px] ${isHoverVolume ? "flex" : "hidden"}`}
-                        />
                     </div>
-                    <span className="w-[1px] h-[33px] bg-alphaBg mx-5"></span>
-                    <span
-                        className={`p-2 rounded-md cursor-pointer bg-alphaBg hover:bg-textSecondary ${classNameIconListRight}`}
-                        onClick={onHandleToggleListSongs}
-                    >
-                        <BsMusicNoteList size={16} />
-                    </span>
                 </div>
             </div>
-        </div>
-
+        </Helmet>
     )
 }
 

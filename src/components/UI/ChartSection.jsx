@@ -88,6 +88,7 @@ const ChartSection = () => {
                                     order={index + 1}
                                     percent={Math.round(parseInt(item.score) * 100 / parseInt(chart?.totalScore))}
                                     size={'w-[60px] h-[60px]'}
+                                    threeDots
                                 />
                             </div>
                         ))}
